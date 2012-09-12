@@ -17,14 +17,16 @@ module NatRecur
     #    * Start Date #=> now
     #    * Recurrence time #=> 1.day
     #    * Until Time #=> never OR nil
+    #    This basically corresponds to the language:
+    #      'every 1 day starting now'
+    #      'daily', 'daily starting now'
     #
     # == Returns
     # A Recurrence object
     #  
     # == Examples
-    #
-    # NatRecur::Recurrence.new #=> <#Nat 
     def initialize expression = "now"
+      raise ArgumentError unless expression.is_a? String
       @expression = "now"
       @start_at = Time.now
       @recurrence_amount = 1.day

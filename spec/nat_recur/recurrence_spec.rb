@@ -27,4 +27,8 @@ describe "NatRecur::Recurrence.new" do
       @recurrence.expression.should == 'now'
     end
   end
+
+  it "should raise ArgumentError if the argument is not a string" do
+    lambda{NatRecur::Recurrence.new(42)}.should raise_exception(ArgumentError)
+  end
 end
