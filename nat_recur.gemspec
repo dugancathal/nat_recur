@@ -17,5 +17,7 @@ Gem::Specification.new do |gem|
 
   #Dependencies
   gem.add_dependency "chronic", "~> 0.7"
+  gem.add_dependency "activesupport", "~> 3.2"
   gem.add_development_dependency "rspec", "~> 2"
+  gem.add_development_dependency "timecop", "~> 0.4"
 end
