@@ -27,8 +27,10 @@ module NatRecur
     # == Examples
     def initialize expression = "now"
       raise ArgumentError unless expression.is_a? String
+      @start_at = Parser.find_start_time(@expression)
+
       @expression = "now"
-      @start_at = Time.now
+      @start_at ||= Time.now
       @recurrence_amount = 1.day
       @recur_until = nil
     end
