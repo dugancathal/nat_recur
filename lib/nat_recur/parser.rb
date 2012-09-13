@@ -12,12 +12,12 @@ module NatRecur
     MATCHABLES = START_WORDS + UNTIL_WORDS + RECUR_WORDS + ['$']
 
     # Used to match and find the 'start' part of the string
-    START_REGEX = /(?:#{START_WORDS.join('|')})(?:s|ed|ing|\-date)?\s*   # Match the word start with some ending
-                    (\w+[\s\w]+?)                             # Match the time clause
+    START_REGEX = /(?<whole_match>(?:#{START_WORDS.join('|')})(?:s|ed|ing|\-date)?\s*   # Match the word start with some ending
+                        (\w+[\s\w]+?))                             # Match the time clause
                     (?:#{(MATCHABLES-START_WORDS).join('|')})   # The end of the start section, by end of string or otherwise
                   /ix
-    UNTIL_REGEX = /(?:#{UNTIL_WORDS.join('|')})(?:s|ed|ing|\-date)?\s*   # Match the word start with some ending
-                    (\w+[\s\w]+?)                             # Match the time clause
+    UNTIL_REGEX = /(?<whole_match>(?:#{UNTIL_WORDS.join('|')})(?:s|ed|ing|\-date)?\s*   # Match the word start with some ending
+                        (\w+[\s\w]+?))                             # Match the time clause
                     (?:#{(MATCHABLES-UNTIL_WORDS).join('|')})   # The end of the start section, by end of string or otherwise
                   /ix
     RECUR_REGEX = /repeat(ing|ed|s)|every/
@@ -39,11 +39,15 @@ module NatRecur
       # See specs for more examples
       %w(start until).each do |matcher|
         define_method("find_#{matcher}_time") do |text|
+          returnable = {found: nil, text: text, cleaned_text: text}
+          return returnable if text.blank?
           if matches = const_get("#{matcher.upcase}_REGEX").match(text)
             if matches[1]
-              return Chronic.parse(clean_time_text(matches[1]))
+              returnable[:cleaned_text] = remove_matched text, matches[:whole_match]
+              returnable[:found] = Chronic.parse(clean_time_text(matches[1]))
             end
           end
+          returnable
         end
       end
 
@@ -53,6 +57,10 @@ module NatRecur
       def clean_time_text text
         text.gsub(/\bat\b/i, '').
           gsub(/[\,\@\"\'\/\-\.]/, '')
+      end
+
+      def remove_matched text, matched
+        text.dup.gsub(matched, '')
       end
     end
   end

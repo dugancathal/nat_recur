@@ -10,8 +10,8 @@ describe "Parser.find_start_time" do
     "start tomorrow recur every 5th of May",
     "starts tomorrow repeat every 5th of May",
     "every 5th of May starting tomorrow",
-    "recurring the 5th of May starts tomorrow",
-    "repeating on the 5th of May start tomorrow",
+    "recurring every 5th of May starts tomorrow",
+    "repeating every 5th of May start tomorrow",
     "recur every 5th of May beginning tomorrow",
   ]
 
@@ -27,13 +27,13 @@ describe "Parser.find_start_time" do
   @proper_test_strings.each do |string|
     it "should properly parse '#{string.titlecase}'" do
       tomorrow = Chronic.parse('tomorrow')
-      NatRecur::Parser.find_start_time(string).should == tomorrow
+      NatRecur::Parser.find_start_time(string)[:found].should == tomorrow
     end
   end
 
   @improper_test_strings.each do |string|
     it "should return nil for '#{string.titlecase}'" do
-      NatRecur::Parser.find_start_time(string).should be_nil
+      NatRecur::Parser.find_start_time(string)[:found].should be_nil
     end
   end
 end

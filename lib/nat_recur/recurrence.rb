@@ -27,9 +27,13 @@ module NatRecur
     # == Examples
     def initialize expression = "now"
       raise ArgumentError unless expression.is_a? String
-      @expression = expression
-      @start_at = Parser.find_start_time(@expression)
-      @recur_until = Parser.find_until_time(@expression)
+      @expression = parseable = expression
+      result = Parser.find_start_time(parseable)
+      @start_at = result[:found]
+      parseable = result[:cleaned_text]
+      result = Parser.find_until_time(parseable)
+      @recur_until = result[:found]
+      parseable = result[:cleaned_text]
 
       @start_at ||= Time.now
       @recur_until ||= nil

@@ -9,9 +9,9 @@ describe "Parser.find_until_time" do
     "quitting one year from today every 5th of May",
     "stopping one year from today recur every 5th of May",
     "stops one year from today repeat every 5th of May",
-    "repeating 5th of May ending one year from today",
-    "recurring the 5th of May quits one year from today",
-    "repeating on the 5th of May finishing one year from today",
+    "repeating every 5th of May ending one year from today",
+    "recurring every 5th of May quits one year from today",
+    "repeating every 5th of May finishing one year from today",
     "recur every 5th of May finish one year from today",
   ]
 
@@ -27,13 +27,13 @@ describe "Parser.find_until_time" do
   @proper_test_strings.each do |string|
     it "should properly parse '#{string.titlecase}'" do
       one_year_from_today = Chronic.parse('one year from today')
-      NatRecur::Parser.find_until_time(string).should == one_year_from_today
+      NatRecur::Parser.find_until_time(string)[:found].should == one_year_from_today
     end
   end
 
   @improper_test_strings.each do |string|
     it "should return nil for '#{string.titlecase}'" do
-      NatRecur::Parser.find_until_time(string).should be_nil
+      NatRecur::Parser.find_until_time(string)[:found].should be_nil
     end
   end
 end
