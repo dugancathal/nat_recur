@@ -5,7 +5,7 @@ module NatRecur
   class Parser
 
     
-    
+    # Public: 
     START_WORDS = %w(start begin commence)
     UNTIL_WORDS = %w(close conclude conclud end finish stop stopp quit quitt until)
     RECUR_WORDS = %w(recur repeat every)
@@ -24,7 +24,7 @@ module NatRecur
 
     class << self
 
-      # From a given natural language string, should pull out the given time
+      # Public: From a given natural language string, should pull out the given time
       # If there isn't one, it should return nil
       # == Parameters
       # text::
@@ -43,7 +43,7 @@ module NatRecur
           return returnable if text.blank?
           if matches = const_get("#{matcher.upcase}_REGEX").match(text)
             if matches[1]
-              returnable[:cleaned_text] = remove_matched text, matches[:whole_match]
+              returnable[:cleaned_text] = text.gsub matches[:whole_match], ''
               returnable[:found] = Chronic.parse(clean_time_text(matches[1]))
             end
           end
@@ -51,16 +51,31 @@ module NatRecur
         end
       end
 
+      # Public: For a given natural language string, should pull out the
+      # recurrence information.
+      # 
+      # Currently, this only supports "every", "each", and some basic idioms.
+      #
+      # text - A natural language time recurrence string
+      #
+      # Examples
+      #
+      #   parse_recurrence "hourly" #=> 1.hour
+      #   parse_recurrence "daily"  #=> 1.day
+      #   parse_recurrence "every day" #=> 1.year
+      #   parse_recurrence "every other day" #=> 2.days
+      #
+      # Returns an integer or nil if nothing was found
+      def parse_recurrence text
+        
+      end
+
       private
-      # Remove all extraneous symbols, words, and nonsense
+      # Internal: Remove all extraneous symbols, words, and nonsense
       # from a natural language time string
       def clean_time_text text
         text.gsub(/\bat\b/i, '').
           gsub(/[\,\@\"\'\/\-\.]/, '')
-      end
-
-      def remove_matched text, matched
-        text.dup.gsub(matched, '')
       end
     end
   end
