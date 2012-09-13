@@ -39,6 +39,16 @@ describe "NatRecur::Recurrence.new" do
     end
   end
 
+  describe "with a valid until time" do
+    before(:all) do
+      @recurrence = NatRecur::Recurrence.new "ending one week from tuesday"
+    end
+
+    it "should set @recur_until accordingly" do
+      @recurrence.recur_until.should == Chronic.parse("one week from tuesday")
+    end
+  end
+
   it "should raise ArgumentError if the argument is not a string" do
     lambda{NatRecur::Recurrence.new(42)}.should raise_exception(ArgumentError)
   end

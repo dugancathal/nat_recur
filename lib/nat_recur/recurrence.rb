@@ -29,10 +29,11 @@ module NatRecur
       raise ArgumentError unless expression.is_a? String
       @expression = expression
       @start_at = Parser.find_start_time(@expression)
+      @recur_until = Parser.find_until_time(@expression)
 
       @start_at ||= Time.now
+      @recur_until ||= nil
       @recurrence_amount = 1.day
-      @recur_until = nil
     end
 
     def next
