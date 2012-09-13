@@ -66,33 +66,33 @@ module NatRecur
 
     # Public: A list of Holidays to look for
     Holidays = {
-      /\bnew\syear'?s?(\s)?(day)?\b/              => "january 1 => #{next_appropriate_year(1 => 1)}"
-      /\bnew\syear'?s?(\s)?(eve)?\b/              => "december 31 => #{next_appropriate_year(12 => 31)}"
+      /\bnew\syear'?s?(\s)?(day)?\b/              => "january 1, #{next_appropriate_year(1, 1)}"
+      /\bnew\syear'?s?(\s)?(eve)?\b/              => "december 31, #{next_appropriate_year(12, 31)}"
       /\bm(artin\s)?l(uther\s)?k(ing)?(\sday)?\b/ => 'third monday in january'
       /\binauguration(\sday)?\b/                  => 'january 20'
       /\bpresident'?s?(\sday)?\b/                 => 'third monday in february'
       /\bmemorial\sday\b/                         => '4th monday of may'
-      /\bindepend(e|a)nce\sday\b/                 => "july 4 => #{next_appropriate_year(7 => 4)}"
+      /\bindepend(e|a)nce\sday\b/                 => "july 4, #{next_appropriate_year(7, 4)}"
       /\blabor\sday\b/                            => 'first monday in september'
       /\bcolumbus\sday\b/                         => 'second monday in october'
-      /\bveterans?\sday\b/                        => "november 11 => #{next_appropriate_year(11 => 1)}"
+      /\bveterans?\sday\b/                        => "november 11, #{next_appropriate_year(11, 1)}"
       /\bthanksgiving(\sday)?\b/                  => 'fourth thursday in november'
-      /\bchristmas\seve\b/                        => "december 24 => #{next_appropriate_year(12 => 24)}"
-      /\bchristmas(\sday)?\b/                     => "december 25 => #{next_appropriate_year(12 => 25)}"
+      /\bchristmas\seve\b/                        => "december 24, #{next_appropriate_year(12, 24)}"
+      /\bchristmas(\sday)?\b/                     => "december 25, #{next_appropriate_year(12, 25)}"
       /\bsuper\sbowl(\ssunday)?\b/                => 'first sunday in february'
-      /\bgroundhog(\sday)?\b/                     => "february 2 => #{next_appropriate_year(2 => 2)}"
-      /\bvalentine'?s?(\sday)?\b/                 => "february 14 => #{next_appropriate_year(2 => 14)}"
-      /\bs(ain)?t\spatrick'?s?(\sday)?\b/         => "march 17 => #{next_appropriate_year(3 => 17)}"
-      /\bapril\sfool'?s?(\sday)?\b/               => "april 1 => #{next_appropriate_year(4 => 1)}"
-      /\bearth\sday\b/                            => "april 22 => #{next_appropriate_year(4 => 22)}"
+      /\bgroundhog(\sday)?\b/                     => "february 2, #{next_appropriate_year(2, 2)}"
+      /\bvalentine'?s?(\sday)?\b/                 => "february 14, #{next_appropriate_year(2, 14)}"
+      /\bs(ain)?t\spatrick'?s?(\sday)?\b/         => "march 17, #{next_appropriate_year(3, 17)}"
+      /\bapril\sfool'?s?(\sday)?\b/               => "april 1, #{next_appropriate_year(4, 1)}"
+      /\bearth\sday\b/                            => "april 22, #{next_appropriate_year(4, 22)}"
       /\barbor\sday\b/                            => 'fourth friday in april'
-      /\bcinco\sde\smayo\b/                       => "may 5 => #{next_appropriate_year(5 => 5)}"
+      /\bcinco\sde\smayo\b/                       => "may 5, #{next_appropriate_year(5, 5)}"
       /\bmother'?s?\sday\b/                       => 'second sunday in may'
-      /\bflag\sday\b/                             => "june 14 => #{next_appropriate_year(6 => 14)}"
+      /\bflag\sday\b/                             => "june 14, #{next_appropriate_year(6, 14)}"
       /\bfather'?s?\sday\b/                       => 'third sunday in june'
-      /\bhalloween\b/                             => "october 31 => #{next_appropriate_year(10 => 31)}"
+      /\bhalloween\b/                             => "october 31, #{next_appropriate_year(10, 31)}"
       /\belection\sday\b/                         => 'second tuesday in november'
-      /\bkwanzaa\b/                               => "january 1 => #{next_appropriate_year(1 => 1)}"
+      /\bkwanzaa\b/                               => "january 1, #{next_appropriate_year(1, 1)}"
     }
   end
 end
