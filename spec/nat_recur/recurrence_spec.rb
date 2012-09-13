@@ -5,6 +5,7 @@ describe "NatRecur::Recurrence.new" do
     before(:each) do
       @recurrence = NatRecur::Recurrence.new
     end
+
     it "should respond to next, start_at, recur_until, expression" do
       [:next, :start_at, :recur_until, :expression].each do |method|
         @recurrence.should respond_to(method)
@@ -25,6 +26,16 @@ describe "NatRecur::Recurrence.new" do
 
     it "should set #expression to 'now'" do
       @recurrence.expression.should == 'now'
+    end
+  end
+
+  describe "with a valid start time" do
+    before(:all) do
+      @recurrence = NatRecur::Recurrence.new "starting tomorrow"
+    end
+
+    it "should set @start_at accordingly" do
+      @recurrence.start_at.should == Chronic.parse('tomorrow')
     end
   end
 
