@@ -46,6 +46,13 @@ module NatRecur
           end
         end
       end
+      # def find_start_time(text)
+      #   if matches = START_REGEX.match(text)
+      #     if matches[1]
+      #       return Chronic.parse clean_time_text(matches[1])
+      #     end
+      #   end
+      # end
 
       private
       # Remove all extraneous symbols, words, and nonsense
