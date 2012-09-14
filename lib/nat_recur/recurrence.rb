@@ -3,7 +3,7 @@ module NatRecur
   # A class to hold and manage recurrences.
   # Accepts a string and builds a recurrence object off of that
   class Recurrence
-    attr_reader :expression, :start_at, :recur_until
+    attr_reader :expression
     # Initialization method
     #
     # == Parameters 
@@ -34,15 +34,20 @@ module NatRecur
       @start_at = @parser.find_start_time
       @recur_until = @parser.find_until_time
       @recurrence_amount = @parser.parse_recurrence
+      if @parser.found_new_start_at
+        #@start_at = @parser.new_start_at
+      end
 
-      @start_at ||= Time.now
-      @recur_until ||= nil
-      @recurrence_amount ||= 1.day
+      
     end
 
     def next
-      @start_at + @recurrence_amount
+      start_at + recurrence_amount
     end
+
+    delegate :start_at, to: :@parser
+    delegate :recur_until, to: :@parser
+    delegate :recurrence_amount, to: :@parser
 
     def translate_holidays text
       Idioms::Holidays.each do |holiday, chronic_name|

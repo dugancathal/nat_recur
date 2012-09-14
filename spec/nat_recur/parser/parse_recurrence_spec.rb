@@ -33,8 +33,11 @@ describe "Parser.parse_recurrence" do
 
     @weekday_strings.each do |expression, recurrence|
       it "should properly parse '#{expression.titlecase}'" do
-        @returned = {found: recurrence, text: expression, recurrence_text: expression}
-        NatRecur::Parser.new(expression).parse_recurrence.should == recurrence
+        parser = NatRecur::Parser.new(expression)
+        parser.parse_recurrence.should == recurrence
+        parser.found_new_start_at.should be
+        just_weekday = expression.gsub(/every\s*/, '')
+        parser.new_start_at.should == Chronic.parse(just_weekday)
       end
     end
   end

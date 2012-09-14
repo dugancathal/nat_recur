@@ -3,7 +3,7 @@ module NatRecur
   # This class provides several utility methods for dealing with
   # time's natural language.
   class Parser
-
+    attr_reader :found_new_start_at, :new_start_at
     
     # Public: A Recurrence vocabulary
     START_WORDS = %w(start begin commence)
@@ -29,10 +29,15 @@ module NatRecur
 
     def initialize text
       @starting_point = @parseable = text
-
+      @found_new_start_at = false
+      @new_start_at = nil
     end
 
-    # Public: From a given natural language string, should pull out the given time
+    def start_at;    @_start_at    || Time.now; end
+    def recur_until; @_recur_until || nil;      end
+    def recurrence_amount;    @_recurrence_amount || 1.day; end
+
+    # Public: From a given natural language string, should pull out the start time
     # If there isn't one, it should return nil
     # == Parameters
     # text::
@@ -42,18 +47,30 @@ module NatRecur
     # Parser.find_start_time 'tomorrow' #=> nil
     # Parser.find_start_time 'start tomorrow' == Chronic.parse('tomorrow') #=> true
     # Parser.find_start_time 'beginning tomorrow' == Chronic.parse('tomorrow') #=> true
-    # Parser.find_until_time 'next year' #=> nil
     #
     # See specs for more examples
-    %w(start until).each do |matcher|
-      define_method("find_#{matcher}_time") do |*args|
-        text = args.first || @parseable
-        return nil if text.blank?
-        if matches = self.class.const_get("#{matcher.upcase}_REGEX").match(text)
-          if matches[1]
-            @parseable = text.gsub matches[:whole_match], ''
-            return Chronic.parse(clean_time_text(matches[1]))
-          end
+    #
+    # Returns the start_time found or nil
+    def find_start_time text = @parseable
+      return nil if text.blank?
+      if matches = START_REGEX.match(text)
+        if matches[1]
+          @parseable = text.gsub matches[:whole_match], ''
+          return @_start_at = Chronic.parse(clean_time_text(matches[1]))
+        end
+      end
+    end
+
+    # Public: From a given natural language string, should pull out the until time
+    # If there isn't one, it should return nil
+    # 
+    # 
+    def find_until_time text = @parseable
+      return nil if text.blank?
+      if matches = UNTIL_REGEX.match(text)
+        if matches[1]
+          @parseable = text.gsub matches[:whole_match], ''
+          return @_recur_until = Chronic.parse(clean_time_text(matches[1]))
         end
       end
     end
@@ -75,17 +92,17 @@ module NatRecur
     # Returns an integer or nil if nothing was found
     def parse_recurrence text = @parseable
       return nil if text.blank?
-      
+
       # These are the easy ones to check for
       matched = nil
-      matched = search_recurrence_units_for(text)
+      @_recurrence_amount = search_recurrence_units_for(text)
       
-      if !matched && (matches = RECUR_REGEX.match(text))
+      if !@_recurrence_amount && (matches = RECUR_REGEX.match(text))
         if matches[1]
-          matched = search_weekdays_for matches[1]
+          @_recurrence_amount = search_weekdays_for matches[1]
         end
       end
-      matched
+      @_recurrence_amount
     end
 
     private
@@ -103,10 +120,17 @@ module NatRecur
       end.last
     end
 
+    # Internal: Search through and return a matched weekday
+    # If one is found, the date should be reset for the recurrence
     def search_weekdays_for text
-      Idioms::Weekdays.find(lambda{return []}) do |day, result|
+      found = Idioms::Weekdays.find(lambda{return []}) do |day, result|
         day =~ text
-      end.last
+      end
+      
+      if @found_new_start_at = found.last
+        @new_start_at = Chronic.parse($1)
+      end
+      found.last
     end
   end
 end

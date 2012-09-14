@@ -42,41 +42,41 @@ module NatRecur
 
     # Public: A list of the weekdays and their common misspellings
     Weekdays = {
-      /\bm[ou]n(day)?\b/i          => 7.days,
-      /\bt(ue|eu|oo|u|)s(day)?\b/i => 7.days,
-      /\btue\b/i                   => 7.days,
-      /\bwe(dnes|nds|nns)day\b/i   => 7.days,
-      /\bwed\b/i                   => 7.days,
-      /\bth(urs|ers)day\b/i        => 7.days,
-      /\bthu\b/i                   => 7.days,
-      /\bfr[iy](day)?\b/i          => 7.days,
-      /\bsat(t?[ue]rday)?\b/i      => 7.days,
-      /\bsu[nm](day)?\b/i          => 7.days,
+      /\b(m[ou]n(day)?)\b/i          => 7.days,
+      /\b(t(ue|eu|oo|u|)s(day)?)\b/i => 7.days,
+      /\b(tue)\b/i                   => 7.days,
+      /\b(we(dnes|nds|nns)day)\b/i   => 7.days,
+      /\b(wed)\b/i                   => 7.days,
+      /\b(th(urs|ers)day)\b/i        => 7.days,
+      /\b(thu)\b/i                   => 7.days,
+      /\b(fr[iy](day)?)\b/i          => 7.days,
+      /\b(sat(t?[ue]rday)?)\b/i      => 7.days,
+      /\b(sun(day)?)\b/i             => 7.days,
     }
 
     # Public: A list of months and their abbreviations
     Months = {
-      /\bjan\.?(uary)?\b/i        => 1,
-      /\bfeb\.?(ruary)?\b/i       => 2,
-      /\bmar\.?(ch)?\b/i          => 3,
-      /\bapr\.?(il)?\b/i          => 4,
-      /\bmay\b/i                  => 5,
-      /\bjun\.?e?\b/i             => 6,
-      /\bjul\.?y?\b/i             => 7,
-      /\baug\.?(ust)?\b/i         => 8,
-      /\bsep\.?(t\.?|tember)?\b/i => 9,
-      /\boct\.?(ober)?\b/i        => 10,
-      /\bnov\.?(ember)?\b/i       => 11,
-      /\bdec\.?(ember)?\b/i       => 12,
+      /\b(jan\.?(uary)?)\b/i        => 1,
+      /\b(feb\.?(ruary)?)\b/i       => 2,
+      /\b(mar\.?(ch)?)\b/i          => 3,
+      /\b(apr\.?(il)?)\b/i          => 4,
+      /\b(may)\b/i                  => 5,
+      /\b(jun\.?e?)\b/i             => 6,
+      /\b(jul\.?y?)\b/i             => 7,
+      /\b(aug\.?(ust)?)\b/i         => 8,
+      /\b(sep\.?(t\.?|tember)?)\b/i => 9,
+      /\b(oct\.?(ober)?)\b/i        => 10,
+      /\b(nov\.?(ember)?)\b/i       => 11,
+      /\b(dec\.?(ember)?)\b/i       => 12,
     }
 
     # Public: A list of recurrence units and their values
     RecurrenceUnits = {
-      /\bhour(ly)?\b/i  => 1.hour,
-      /\bday?(ily)?\b/i => 1.day,
-      /\bweek(ly)?\b/i  => 1.week,
-      /\bmonth(ly)?\b/i => 1.month,
-      /\byear(ly)?\b/i  => 1.year,
+      /\b(hour(ly)?)\b/i  => 1.hour,
+      /\b(day?(ily)?)\b/i => 1.day,
+      /\b(week(ly)?)\b/i  => 1.week,
+      /\b(month(ly)?)\b/i => 1.month,
+      /\b(year(ly)?)\b/i  => 1.year,
     }
 
     # Public: A list of Holidays to look for
