@@ -27,13 +27,13 @@ describe "Parser.find_start_time" do
   @proper_test_strings.each do |string|
     it "should properly parse '#{string.titlecase}'" do
       tomorrow = Chronic.parse('tomorrow')
-      NatRecur::Parser.find_start_time(string)[:found].should == tomorrow
+      NatRecur::Parser.new(string).find_start_time.should == tomorrow
     end
   end
 
   @improper_test_strings.each do |string|
     it "should return nil for '#{string.titlecase}'" do
-      NatRecur::Parser.find_start_time(string)[:found].should be_nil
+      NatRecur::Parser.new(string).find_start_time.should be_nil
     end
   end
 end

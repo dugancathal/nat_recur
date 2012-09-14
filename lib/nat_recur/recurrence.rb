@@ -28,20 +28,16 @@ module NatRecur
     def initialize expression = "now"
       raise ArgumentError unless expression.is_a? String
       @expression = parseable = expression
-      
       parseable = translate_holidays(parseable)
-
-      result = Parser.find_start_time(parseable)
-      @start_at = result[:found]
-      parseable = result[:cleaned_text]
-
-      result = Parser.find_until_time(parseable)
-      @recur_until = result[:found]
-      parseable = result[:cleaned_text]
+      
+      @parser = Parser.new parseable
+      @start_at = @parser.find_start_time
+      @recur_until = @parser.find_until_time
+      @recurrence_amount = @parser.parse_recurrence
 
       @start_at ||= Time.now
       @recur_until ||= nil
-      @recurrence_amount = 1.day
+      @recurrence_amount ||= 1.day
     end
 
     def next

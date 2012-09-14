@@ -27,15 +27,14 @@ describe "Parser.parse_recurrence" do
 
     @all_strings.each do |expression, recurrence|
       it "should properly parse '#{expression.titlecase}'" do
-        @returned = {found: recurrence, text: expression, recurrence_text: expression}
-        NatRecur::Parser.parse_recurrence(expression).should == @returned
+        NatRecur::Parser.new(expression).parse_recurrence.should == recurrence
       end
     end
 
     @weekday_strings.each do |expression, recurrence|
       it "should properly parse '#{expression.titlecase}'" do
         @returned = {found: recurrence, text: expression, recurrence_text: expression}
-        NatRecur::Parser.parse_recurrence(expression).should == @returned
+        NatRecur::Parser.new(expression).parse_recurrence.should == recurrence
       end
     end
   end

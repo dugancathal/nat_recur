@@ -27,13 +27,13 @@ describe "Parser.find_until_time" do
   @proper_test_strings.each do |string|
     it "should properly parse '#{string.titlecase}'" do
       one_year_from_today = Chronic.parse('one year from today')
-      NatRecur::Parser.find_until_time(string)[:found].should == one_year_from_today
+      NatRecur::Parser.new(string).find_until_time.should == one_year_from_today
     end
   end
 
   @improper_test_strings.each do |string|
     it "should return nil for '#{string.titlecase}'" do
-      NatRecur::Parser.find_until_time(string)[:found].should be_nil
+      NatRecur::Parser.new(string).find_until_time.should be_nil
     end
   end
 end
