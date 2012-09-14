@@ -3,7 +3,7 @@ module NatRecur
   # This class provides several utility methods for dealing with
   # time's natural language.
   class Parser
-    attr_reader :found_new_start_at, :new_start_at
+    attr_reader :found_new_start_at
     
     # Public: A Recurrence vocabulary
     START_WORDS = %w(start begin commence)
@@ -31,6 +31,7 @@ module NatRecur
       @starting_point = @parseable = text
       @found_new_start_at = false
       @new_start_at = nil
+      @today = Time.now
     end
 
     def start_at;    @_start_at    || Time.now; end
@@ -53,6 +54,7 @@ module NatRecur
     # Returns the start_time found or nil
     def find_start_time text = @parseable
       return nil if text.blank?
+      text = text.strip
       if matches = START_REGEX.match(text)
         if matches[1]
           @parseable = text.gsub matches[:whole_match], ''
@@ -67,6 +69,7 @@ module NatRecur
     # 
     def find_until_time text = @parseable
       return nil if text.blank?
+      text = text.strip
       if matches = UNTIL_REGEX.match(text)
         if matches[1]
           @parseable = text.gsub matches[:whole_match], ''
@@ -92,14 +95,19 @@ module NatRecur
     # Returns an integer or nil if nothing was found
     def parse_recurrence text = @parseable
       return nil if text.blank?
-
+      text = text.strip
       # These are the easy ones to check for
-      matched = nil
+      if text =~ /\bat\b/
+        if trying = Chronic.parse(text)
+
+        end
+      end
       @_recurrence_amount = search_recurrence_units_for(text)
       
       if !@_recurrence_amount && (matches = RECUR_REGEX.match(text))
         if matches[1]
           @_recurrence_amount = search_weekdays_for matches[1]
+          @_recurrence_amount ||= search_months_for matches[1]
         end
       end
       @_recurrence_amount
@@ -126,9 +134,27 @@ module NatRecur
       found = Idioms::Weekdays.find(lambda{return []}) do |day, result|
         day =~ text
       end
+
+      if @found_new_start_at = found.last
+        trying = Chronic.parse($1)
+
+        if trying && (@today < trying)
+          @_start_at = trying
+        end
+      end
+      found.last
+    end
+
+    def search_months_for text
+      found = Idioms::Months.find(lambda{return []}) do |day, result|
+        day =~ text
+      end
       
       if @found_new_start_at = found.last
-        @new_start_at = Chronic.parse($1)
+        trying = Chronic.parse($1)
+        if trying && (@today > trying)
+          @_start_at = trying
+        end
       end
       found.last
     end

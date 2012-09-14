@@ -1,5 +1,5 @@
 describe "Parser.parse_recurrence" do
-  describe "with an 'every' specified recurrence'" do
+  describe "with an 'every' specified recurrence" do
 
     @idiom_strings = {
       'hourly'      => 1.hour,
@@ -23,6 +23,7 @@ describe "Parser.parse_recurrence" do
       'each year'   => 1.year,
     }
     @weekday_strings = Date::DAYNAMES.map {|name| {"every #{name}" => 1.week}}.inject(&:merge)
+    @month_strings = Date::MONTHNAMES.compact.map {|name| {"every #{name}" => 1.month}}.inject(&:merge)
     @all_strings = @idiom_strings.merge(@each_strings).merge(@every_strings)
 
     @all_strings.each do |expression, recurrence|
@@ -31,13 +32,12 @@ describe "Parser.parse_recurrence" do
       end
     end
 
-    @weekday_strings.each do |expression, recurrence|
+    (@weekday_strings.merge(@month_strings)).each do |expression, recurrence|
       it "should properly parse '#{expression.titlecase}'" do
         parser = NatRecur::Parser.new(expression)
         parser.parse_recurrence.should == recurrence
         parser.found_new_start_at.should be
         just_weekday = expression.gsub(/every\s*/, '')
-        parser.new_start_at.should == Chronic.parse(just_weekday)
       end
     end
   end

@@ -31,14 +31,12 @@ module NatRecur
       parseable = translate_holidays(parseable)
       
       @parser = Parser.new parseable
-      @start_at = @parser.find_start_time
-      @recur_until = @parser.find_until_time
-      @recurrence_amount = @parser.parse_recurrence
+      @parser.find_start_time
+      @parser.find_until_time
+      @parser.parse_recurrence
       if @parser.found_new_start_at
         #@start_at = @parser.new_start_at
       end
-
-      
     end
 
     def next
