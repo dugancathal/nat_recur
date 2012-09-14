@@ -22,15 +22,20 @@ describe "Parser.parse_recurrence" do
       'each month'  => 1.month,
       'each year'   => 1.year,
     }
+    @weekday_strings = Date::DAYNAMES.map {|name| {"every #{name}" => 1.week}}.inject(&:merge)
+    @all_strings = @idiom_strings.merge(@each_strings).merge(@every_strings)
 
-    before(:each) do
-      @returned = {found: nil}
+    @all_strings.each do |expression, recurrence|
+      it "should properly parse '#{expression.titlecase}'" do
+        @returned = {found: recurrence, text: expression, recurrence_text: expression}
+        NatRecur::Parser.parse_recurrence(expression).should == @returned
+      end
     end
 
-    @every_strings.each do |expression, recurrence|
+    @weekday_strings.each do |expression, recurrence|
       it "should properly parse '#{expression.titlecase}'" do
-        @returned[:found] = recurrence
-        NatRecur::Parser.parse_recurrence(expression).should == @returned[:found]
+        @returned = {found: recurrence, text: expression, recurrence_text: expression}
+        NatRecur::Parser.parse_recurrence(expression).should == @returned
       end
     end
   end

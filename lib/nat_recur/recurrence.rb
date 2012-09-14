@@ -28,9 +28,13 @@ module NatRecur
     def initialize expression = "now"
       raise ArgumentError unless expression.is_a? String
       @expression = parseable = expression
+      
+      parseable = translate_holidays(parseable)
+
       result = Parser.find_start_time(parseable)
       @start_at = result[:found]
       parseable = result[:cleaned_text]
+
       result = Parser.find_until_time(parseable)
       @recur_until = result[:found]
       parseable = result[:cleaned_text]
@@ -42,6 +46,13 @@ module NatRecur
 
     def next
       @start_at + @recurrence_amount
+    end
+
+    def translate_holidays text
+      Idioms::Holidays.each do |holiday, chronic_name|
+        text.gsub! holiday, chronic_name
+      end
+      text
     end
   end
 end
