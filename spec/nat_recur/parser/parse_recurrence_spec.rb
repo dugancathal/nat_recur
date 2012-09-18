@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe "Parser.parse_recurrence" do
   describe "with an 'every' specified recurrence" do
 

@@ -32,6 +32,16 @@ module NatRecur
       @current_date = @parser.start_at
     end
 
+    # Public: Validates recurrence parsing.  Basically just a
+    # hook into the underlying parser
+    #
+    # expression - a natural language string just like is passed to #new
+    #
+    # Returns a truthy value on success or nil on failure
+    def self.validate expression
+      Parser.new(expression).parse_recurrence
+    end
+
     # Public: Gets the next iteration of the recurrence
     #
     # i - a Fixnum or Bignum that specifies the amount to increment by
